@@ -29,11 +29,12 @@
           }
          ?>
       
+      <h2>Send SMS To A Phone Number</h2>
    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
     <div class="form-group row">
       <label for="staticEmail" class="col-sm-2 col-form-label">Phone</label>
       <div class="col-sm-10">
-      <input type="text" class="form-control" id="phone" name="phone" placeholder="+254...">
+      <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number">
       </div>
     </div>
     <div class="form-group row">
