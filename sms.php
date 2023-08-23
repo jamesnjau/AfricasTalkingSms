@@ -23,10 +23,10 @@ class SMS{
             try {
                 // Use the service
                 $result = '';
-                // $result   = $sms->send([
-                    //     'to'      => '+254725655910',
-                    //     'message' => 'Bot Classic Live'
-                    // ]);
+                $result   = $sms->send([
+                        'to'      => $to,
+                        'message' => $message
+                    ]);
             $response["message"] = "Message sent successfully";
             $response["success"] = true;   
             return $response;
