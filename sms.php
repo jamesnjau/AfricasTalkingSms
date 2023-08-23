@@ -1,60 +1,47 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Untitled Document</title>
-</head>
+<?php
+    require 'vendor/autoload.php';
+    require 'constants.php';
+    use AfricasTalking\SDK\AfricasTalking;
 
-<body><center>
-<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
-phone :<input type="text" name="phone"><br /><br />
-message:<textarea name="message"></textarea><br />
-<button name="submit">submit</button>
-</form></center>
-<?php 
-if(isset($_POST['submit'])){
-@$phone=$_POST['phone'];
-@$message=$_POST['message'];
-
- // Be sure to include the file you've just downloaded
-    require_once('AfricasTalkingGateway.php');
-    // Specify your login credentials
-    $username   = "Enter your username her";
-    $apikey     = "enter your api key here";
-    // NOTE: If connecting to the sandbox, please use your sandbox login credentials
-    // Specify the numbers that you want to send to in a comma-separated list
-    // Please ensure you include the country code (+254 for Kenya in this case)
-    $recipients = $phone;
-    // And of course we want our recipients to know what we really do
-    $message    = $message;
-    // Create a new instance of our awesome gateway class
-    $gateway    = new AfricasTalkingGateway($username, $apikey);
-    // NOTE: If connecting to the sandbox, please add the sandbox flag to the constructor:
-    /*************************************************************************************
-                 ****SANDBOX****
-    $gateway    = new AfricasTalkingGateway($username, $apiKey, "sandbox");
-    **************************************************************************************/
-    // Any gateway error will be captured by our custom Exception class below, 
-    // so wrap the call in a try-catch block
-    try 
-    { 
-      // Thats it, hit send and we'll take care of the rest. 
-      $results = $gateway->sendMessage($recipients, $message);
-                
-      foreach($results as $result) {
-        // status is either "Success" or "error message" 
-       
-      }
+class SMS{
+    public function send($to, $message){ 
+        if (isset($to) && isset($message)) {  
+            $response = array();
+            $AT = new AfricasTalking(USERNAME, APIKEY); 
+            if (empty($to)) { 
+                $response["message"] = "Phone number cannot be empty";
+                $response["success"] = false;
+                return $response;
+            }
+            if (empty($message)) { 
+                $response["message"] = "Message cannot be empty";
+                $response["success"] = false;
+                return $response;
+            }
+            $sms      = $AT->sms();
+            
+            try {
+                // Use the service
+                $result = '';
+                // $result   = $sms->send([
+                    //     'to'      => '+254725655910',
+                    //     'message' => 'Bot Classic Live'
+                    // ]);
+            $response["message"] = "Message sent successfully";
+            $response["success"] = true;   
+            return $response;
+            } catch (\Throwable $th) {
+                $response["message"] = "Error ".$th;
+                $response["success"] = false;
+                return $response;
+            }
+            
+        }else{ 
+            $response["message"] = "Number and message required";
+            $response["success"] = false;
+            return $response;
+        }
     }
-    catch ( AfricasTalkingGatewayException $e )
-    {
-      echo "Encountered an error while sending: ".$e->getMessage();
-    }
-
-                
-
-  }              
+ }
 
 ?>
-</body>
-</html>
